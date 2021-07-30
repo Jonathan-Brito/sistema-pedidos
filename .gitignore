@@ -12,6 +12,11 @@ target/
 .settings
 .springBeans
 .sts4-cache
+/HELP.md
+/mvnw
+/mvnw.cmd
+.gitignore
+.git
 
 ### IntelliJ IDEA ###
 .idea
