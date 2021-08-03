@@ -7,12 +7,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.brito.sistemapedidos.domain.Address;
 import com.brito.sistemapedidos.domain.Category;
 import com.brito.sistemapedidos.domain.City;
+import com.brito.sistemapedidos.domain.Client;
 import com.brito.sistemapedidos.domain.Product;
 import com.brito.sistemapedidos.domain.State;
+import com.brito.sistemapedidos.domain.enums.TipoClient;
+import com.brito.sistemapedidos.repositories.AddressRepository;
 import com.brito.sistemapedidos.repositories.CategoryRepository;
 import com.brito.sistemapedidos.repositories.CityRepository;
+import com.brito.sistemapedidos.repositories.ClientRepository;
 import com.brito.sistemapedidos.repositories.ProductRepository;
 import com.brito.sistemapedidos.repositories.StateRepository;
 
@@ -30,6 +35,12 @@ public class SistemaPedidosApplication implements CommandLineRunner {
 	
 	@Autowired
 	private CityRepository cityRepository;
+	
+	@Autowired
+	private ClientRepository clientRepository;
+	
+	@Autowired
+	private AddressRepository addressRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SistemaPedidosApplication.class, args);
@@ -68,6 +79,17 @@ public class SistemaPedidosApplication implements CommandLineRunner {
 		stateRepository.saveAll(Arrays.asList(sta1, sta2));
 		cityRepository.saveAll(Arrays.asList(c1, c2, c3));
 		
+		Client cli1 = new Client(null, "Maria Silva", "maria@gmail.com", "11111111111", TipoClient.PESSOAFISICA);
+		
+		cli1.getPhones().addAll(Arrays.asList("86 999999999", "86 9888888888"));
+		
+		Address a1 = new Address(null, "Rua Flores", "300", "Apto 003", "Barra Grande", "7752", cli1, c1);
+		Address a2 = new Address(null, "Avenida Matos", "100", "Sala 800", "Parque Poty", "5984", cli1, c2);
+		
+		cli1.getAddresses().addAll(Arrays.asList(a1, a2));
+		
+		clientRepository.saveAll(Arrays.asList(cli1));
+		addressRepository.saveAll(Arrays.asList(a1, a2));
 	}
 
 }
