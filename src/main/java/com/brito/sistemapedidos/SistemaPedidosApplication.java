@@ -8,9 +8,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.brito.sistemapedidos.domain.Category;
+import com.brito.sistemapedidos.domain.City;
 import com.brito.sistemapedidos.domain.Product;
+import com.brito.sistemapedidos.domain.State;
 import com.brito.sistemapedidos.repositories.CategoryRepository;
+import com.brito.sistemapedidos.repositories.CityRepository;
 import com.brito.sistemapedidos.repositories.ProductRepository;
+import com.brito.sistemapedidos.repositories.StateRepository;
 
 @SpringBootApplication
 public class SistemaPedidosApplication implements CommandLineRunner {
@@ -20,6 +24,12 @@ public class SistemaPedidosApplication implements CommandLineRunner {
 	
 	@Autowired
 	private ProductRepository productRepository;
+	
+	@Autowired
+	private StateRepository stateRepository;
+	
+	@Autowired
+	private CityRepository cityRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SistemaPedidosApplication.class, args);
@@ -44,6 +54,20 @@ public class SistemaPedidosApplication implements CommandLineRunner {
 		
 		categoryRepository.saveAll(Arrays.asList(cat1, cat2));
 		productRepository.saveAll(Arrays.asList(p1, p2, p3));
+		
+		State sta1 = new State(null, "Minas Gerais");
+		State sta2 = new State(null, "São Paulo");
+		
+		City c1 = new City(null, "Uberlândia", sta1);
+		City c2 = new City(null, "São Paulo", sta2);
+		City c3 = new City(null, "Campinas", sta2);
+		
+		sta1.getCities().addAll(Arrays.asList(c1));
+		sta2.getCities().addAll(Arrays.asList(c2, c3));
+		
+		stateRepository.saveAll(Arrays.asList(sta1, sta2));
+		cityRepository.saveAll(Arrays.asList(c1, c2, c3));
+		
 	}
 
 }
