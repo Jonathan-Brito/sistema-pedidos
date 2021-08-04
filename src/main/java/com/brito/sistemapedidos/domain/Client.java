@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Client implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -33,14 +33,17 @@ public class Client implements Serializable {
 	private String cpfOrCnpj;
 
 	private Integer tipo;
-	
+
 	@JsonManagedReference
 	@OneToMany(mappedBy = "client")
 	private List<Address> addresses = new ArrayList<>();
-	
+
 	@ElementCollection
-	@CollectionTable(name = "PHONE")	
+	@CollectionTable(name = "PHONE")
 	private Set<String> phones = new HashSet<>();
+	
+	@OneToMany(mappedBy = "client")
+	private List<Request> requests = new ArrayList<>();
 
 	public Client() {
 
@@ -109,6 +112,14 @@ public class Client implements Serializable {
 
 	public void setPhones(Set<String> phones) {
 		this.phones = phones;
+	}
+
+	public List<Request> getRequests() {
+		return requests;
+	}
+
+	public void setRequests(List<Request> requests) {
+		this.requests = requests;
 	}
 
 	@Override
