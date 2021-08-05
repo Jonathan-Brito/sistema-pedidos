@@ -2,6 +2,8 @@ package com.brito.sistemapedidos.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,29 +12,33 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
 public class Request implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	private Date instante;
-	
+
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "request")
 	private Payment payment;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private Client client;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "delivery_address_id")
 	private Address deliveryAddress;
+	
+	@OneToMany(mappedBy = "id.request")
+	private Set<OrderedItem> itens = new HashSet<>();
 
 	public Request() {
 
@@ -84,6 +90,14 @@ public class Request implements Serializable {
 
 	public void setDeliveryAddress(Address deliveryAddress) {
 		this.deliveryAddress = deliveryAddress;
+	}
+
+	public Set<OrderedItem> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<OrderedItem> itens) {
+		this.itens = itens;
 	}
 
 	@Override

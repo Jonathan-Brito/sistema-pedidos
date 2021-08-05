@@ -12,6 +12,7 @@ import com.brito.sistemapedidos.domain.Address;
 import com.brito.sistemapedidos.domain.Category;
 import com.brito.sistemapedidos.domain.City;
 import com.brito.sistemapedidos.domain.Client;
+import com.brito.sistemapedidos.domain.OrderedItem;
 import com.brito.sistemapedidos.domain.Payment;
 import com.brito.sistemapedidos.domain.PaymentWithBillet;
 import com.brito.sistemapedidos.domain.PaymentWithCard;
@@ -24,6 +25,7 @@ import com.brito.sistemapedidos.repositories.AddressRepository;
 import com.brito.sistemapedidos.repositories.CategoryRepository;
 import com.brito.sistemapedidos.repositories.CityRepository;
 import com.brito.sistemapedidos.repositories.ClientRepository;
+import com.brito.sistemapedidos.repositories.OrderedItemRepository;
 import com.brito.sistemapedidos.repositories.PaymentRepository;
 import com.brito.sistemapedidos.repositories.ProductRepository;
 import com.brito.sistemapedidos.repositories.RequestRepository;
@@ -55,6 +57,9 @@ public class SistemaPedidosApplication implements CommandLineRunner {
 	
 	@Autowired
 	private PaymentRepository paymentRepository;
+	
+	@Autowired
+	private OrderedItemRepository orderedItemRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SistemaPedidosApplication.class, args);
@@ -120,6 +125,19 @@ public class SistemaPedidosApplication implements CommandLineRunner {
 		
 		requestRepository.saveAll(Arrays.asList(ped1, ped2));
 		paymentRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		
+		OrderedItem ip1 = new OrderedItem(ped1, p1, 0.00, 1, 2000.00);
+		OrderedItem ip2 = new OrderedItem(ped1, p3, 0.00, 2, 80.00);
+		OrderedItem ip3 = new OrderedItem(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		orderedItemRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
 
 }

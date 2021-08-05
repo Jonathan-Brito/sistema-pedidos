@@ -2,7 +2,9 @@ package com.brito.sistemapedidos.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -26,13 +29,14 @@ public class Product implements Serializable {
 	private String name;
 
 	private Double price;
-	
+
 	@JsonBackReference
 	@ManyToMany
-	@JoinTable(name = "PRODUCT_CATEGORY", 
-	joinColumns = @JoinColumn(name = "product_id"), 
-	inverseJoinColumns = @JoinColumn(name = "category_id"))
+	@JoinTable(name = "PRODUCT_CATEGORY", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private List<Category> categories = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "id.product")
+	private Set<OrderedItem> itens = new HashSet<>();
 
 	public Product() {
 
@@ -43,6 +47,14 @@ public class Product implements Serializable {
 		this.id = id;
 		this.name = name;
 		this.price = price;
+	}
+	
+	public List<Request> getRequests(){
+		List<Request> lista = new ArrayList<>();
+		for (OrderedItem x : itens) {
+			lista.add(x.getRequest());
+		}
+		return lista;
 	}
 
 	public Integer getId() {
@@ -75,6 +87,14 @@ public class Product implements Serializable {
 
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
+	}
+
+	public Set<OrderedItem> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<OrderedItem> itens) {
+		this.itens = itens;
 	}
 
 	@Override
