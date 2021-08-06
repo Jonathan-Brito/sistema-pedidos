@@ -15,8 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.brito.sistemapedidos.domain.enums.TipoClient;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Client implements Serializable {
@@ -35,15 +34,14 @@ public class Client implements Serializable {
 
 	private Integer tipo;
 
-	@JsonManagedReference
 	@OneToMany(mappedBy = "client")
 	private List<Address> addresses = new ArrayList<>();
 
 	@ElementCollection
 	@CollectionTable(name = "PHONE")
 	private Set<String> phones = new HashSet<>();
-	
-	@JsonBackReference
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "client")
 	private List<Request> requests = new ArrayList<>();
 
