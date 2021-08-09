@@ -3,11 +3,13 @@ package com.brito.sistemapedidos.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,10 +31,13 @@ public class CategoryResource {
 	private CategoryService categoryService;
 	
 	@GetMapping
-	public ResponseEntity<List<Category>> findAll(){
+	public ResponseEntity<List<CategoryDTO>> findAll(){
 		List<Category> list = categoryService.findAll();
+		
+		List<CategoryDTO> listDto = list.stream().map(obj -> new CategoryDTO(obj))
+				.collect(Collectors.toList());
 
-		return ResponseEntity.ok().body(list);
+		return ResponseEntity.ok().body(listDto);
 	}
 	
 	@GetMapping(value = "/{id}")
@@ -59,6 +64,13 @@ public class CategoryResource {
 		Category category = categoryService.update(id, categoryDTO);
 		
 		return ResponseEntity.ok().body(new CategoryDTO(category));
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Integer id){
+		categoryService.delete(id);
+		
+		return ResponseEntity.noContent().build();
 	}
 
 }
