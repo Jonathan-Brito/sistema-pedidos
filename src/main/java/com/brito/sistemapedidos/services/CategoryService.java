@@ -7,6 +7,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.brito.sistemapedidos.dtos.CategoryDTO;
@@ -57,6 +60,11 @@ public class CategoryService {
 			throw new DataIntegrityException
 			("Category não pode ser deletado! Possui products associados");
 		}
+	}
+	
+	public Page<Category> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		return categoryRepository.findAll(pageRequest);
 	}
 
 }
