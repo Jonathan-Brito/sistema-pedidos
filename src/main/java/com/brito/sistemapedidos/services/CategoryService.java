@@ -30,5 +30,11 @@ public class CategoryService {
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Category.class.getName()));
 	}
 	
+	public Category create(Category category) {
+		category.setId(null);
+		
+		return categoryRepository.save(category);
+	}
+	
 
 }
