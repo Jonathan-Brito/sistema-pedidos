@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.brito.sistemapedidos.dtos.CategoryDTO;
 import com.brito.sistemapedidos.domain.Category;
 import com.brito.sistemapedidos.repositories.CategoryRepository;
 import com.brito.sistemapedidos.services.exceptions.ObjectNotFoundException;
@@ -33,6 +34,14 @@ public class CategoryService {
 	public Category create(Category category) {
 		category.setId(null);
 		
+		return categoryRepository.save(category);
+	}
+	
+	public Category update(Integer id, CategoryDTO categoryDTO) {
+		Category category = findById(id);
+		
+		category.setName(categoryDTO.getName());
+				
 		return categoryRepository.save(category);
 	}
 	
