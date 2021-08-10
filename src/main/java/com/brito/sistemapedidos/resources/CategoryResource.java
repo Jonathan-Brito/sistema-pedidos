@@ -50,7 +50,9 @@ public class CategoryResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Category> create(@Valid @RequestBody Category category){
+	public ResponseEntity<Category> create(@Valid @RequestBody CategoryDTO categoryDto){
+		
+		Category category = categoryService.fromDTO(categoryDto);
 		
 		category = categoryService.create(category);
 		
