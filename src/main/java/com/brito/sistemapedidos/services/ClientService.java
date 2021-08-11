@@ -47,6 +47,7 @@ public class ClientService {
 		Client client = findById(id);
 		
 		client.setName(clientDTO.getName());
+		client.setEmail(clientDTO.getEmail());
 				
 		return clientRepository.save(client);
 	}
