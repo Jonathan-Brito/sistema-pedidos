@@ -11,10 +11,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-
+import com.brito.sistemapedidos.domain.Address;
+import com.brito.sistemapedidos.domain.City;
 import com.brito.sistemapedidos.domain.Client;
+import com.brito.sistemapedidos.domain.enums.TipoClient;
 import com.brito.sistemapedidos.dtos.ClientDTO;
+import com.brito.sistemapedidos.dtos.ClientNewDTO;
+import com.brito.sistemapedidos.repositories.AddressRepository;
 import com.brito.sistemapedidos.repositories.ClientRepository;
 import com.brito.sistemapedidos.services.exceptions.DataIntegrityException;
 import com.brito.sistemapedidos.services.exceptions.ObjectNotFoundException;
@@ -25,6 +30,9 @@ public class ClientService {
 	
 	@Autowired
 	private ClientRepository clientRepository;
+	
+	@Autowired
+	private AddressRepository addressRepository;
 	
 	public List<Client> findAll(){
 		return clientRepository.findAll();
@@ -37,10 +45,15 @@ public class ClientService {
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Client.class.getName()));
 	}
 	
+	@Transactional
 	public Client create(Client client) {
 		client.setId(null);
+	
+		client = clientRepository.save(client);
 		
-		return clientRepository.save(client);
+		addressRepository.saveAll(client.getAddresses());
+		
+		return client;
 	}
 	
 	public Client update(Integer id, ClientDTO clientDTO) {
@@ -70,9 +83,33 @@ public class ClientService {
 	}
 	
 	public Client fromDTO(ClientDTO clientDTO) {
-		return new Client(clientDTO.getId(), clientDTO.getName(), clientDTO.getEmail(), null, null);
+		 return new Client(clientDTO.getId(), clientDTO.getName(), clientDTO.getEmail(), null, null);
+		 
 	}
 	
+	public Client fromDTO(ClientNewDTO clientNewDTO) {
+		 Client cli = new Client(null, clientNewDTO.getName(), 
+				 clientNewDTO.getEmail(), clientNewDTO.getCpfOrCnpj(), 
+				 TipoClient.toEnum(clientNewDTO.getTipo()));
+		 
+		 City cid = new City(clientNewDTO.getCityId(), null, null);
+		 
+		 Address end = new Address(null, clientNewDTO.getLogradouro(), clientNewDTO.getNumber(),
+				 clientNewDTO.getComplement(), clientNewDTO.getDistrict(),
+				 clientNewDTO.getCep(), cli, cid);
+		 
+		 cli.getAddresses().add(end);
+		 cli.getPhones().add(clientNewDTO.getPhone1());
+		 
+		 if(clientNewDTO.getPhone2() != null) {
+			 cli.getPhones().add(clientNewDTO.getPhone2());
+		 }
 	
+		 if(clientNewDTO.getPhone3() != null) {
+			 cli.getPhones().add(clientNewDTO.getPhone3());
+		 }
+		 
+		 return cli;
 
+}
 }
