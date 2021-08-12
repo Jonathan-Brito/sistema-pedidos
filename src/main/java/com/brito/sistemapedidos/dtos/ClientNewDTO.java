@@ -2,28 +2,45 @@ package com.brito.sistemapedidos.dtos;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.brito.sistemapedidos.services.validation.ClientInsert;
+
+@ClientInsert
 public class ClientNewDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
+	@NotEmpty(message = "Campo é obrigatório")
+	@Length(min = 5, max = 100, message = "Campo name deve ter entre 5 e 100 caracteres")
 	private String name;
-
+	
+	@NotEmpty(message = "Campo é obrigatório")
+	@Email(message = "Email é inválido")
 	private String email;
-
+	
+	@NotEmpty(message = "Campo é obrigatório")
 	private String cpfOrCnpj;
 
 	private Integer tipo;
-
+	
+	@NotEmpty(message = "Campo é obrigatório")
 	private String logradouro;
-
+	
+	@NotEmpty(message = "Campo é obrigatório")
 	private String number;
 
 	private String complement;
 
 	private String district;
-
+	
+	@NotEmpty(message = "Campo é obrigatório")
 	private String cep;
-
+	
+	@NotEmpty(message = "Campo é obrigatório")
 	private String phone1;
 
 	private String phone2;
