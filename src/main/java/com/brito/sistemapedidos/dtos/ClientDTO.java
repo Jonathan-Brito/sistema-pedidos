@@ -8,7 +8,9 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import com.brito.sistemapedidos.domain.Client;
+import com.brito.sistemapedidos.services.validation.ClientUpdate;
 
+@ClientUpdate
 public class ClientDTO implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
