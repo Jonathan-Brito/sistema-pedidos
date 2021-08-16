@@ -34,6 +34,10 @@ public class OrderedItem implements Serializable {
 		this.amount = amount;
 		this.price = price;
 	}
+	
+	public double getSubTotal() {
+		return (price - discount) * amount;
+	}
 
 	public OrderedItemPK getId() {
 		return id;

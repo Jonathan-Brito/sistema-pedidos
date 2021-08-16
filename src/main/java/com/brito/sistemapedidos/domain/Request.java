@@ -56,6 +56,15 @@ public class Request implements Serializable {
 		this.client = client;
 		this.deliveryAddress = deliveryAddress;
 	}
+	
+	public double getValorTotal() {
+		double soma = 0.0;
+		
+		for(OrderedItem ip : itens) {
+			soma = soma + ip.getSubTotal();
+		}
+		return soma;
+	}
 
 	public Integer getId() {
 		return id;
