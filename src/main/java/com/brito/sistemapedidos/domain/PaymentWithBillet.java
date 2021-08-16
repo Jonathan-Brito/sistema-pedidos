@@ -6,8 +6,10 @@ import javax.persistence.Entity;
 
 import com.brito.sistemapedidos.domain.enums.StatePayment;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @Entity
+@JsonTypeName("paymentWithBillet")
 public class PaymentWithBillet extends Payment {
 	
 	private static final long serialVersionUID = 1L;

@@ -34,9 +34,26 @@ public class OrderedItem implements Serializable {
 		this.amount = amount;
 		this.price = price;
 	}
-	
+
 	public double getSubTotal() {
 		return (price - discount) * amount;
+	}
+
+	@JsonIgnore
+	public Request getRequest() {
+		return id.getRequest();
+	}
+
+	public void setRequest(Request request) {
+		id.setRequest(request);
+	}
+
+	public Product getProduct() {
+		return id.getProduct();
+	}
+
+	public void setProduct(Product product) {
+		id.setProduct(product);
 	}
 
 	public OrderedItemPK getId() {
@@ -69,15 +86,6 @@ public class OrderedItem implements Serializable {
 
 	public void setPrice(Double price) {
 		this.price = price;
-	}
-
-	@JsonIgnore
-	public Request getRequest() {
-		return id.getRequest();
-	}
-
-	public Product getProduct() {
-		return id.getProduct();
 	}
 
 	@Override
