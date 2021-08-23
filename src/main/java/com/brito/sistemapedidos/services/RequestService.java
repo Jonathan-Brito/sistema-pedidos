@@ -71,6 +71,7 @@ public class RequestService {
 		}
 		
 		orderedItemRepository.saveAll(request.getItens());
+		System.out.println(request);
 		return request;
 	}
 	
