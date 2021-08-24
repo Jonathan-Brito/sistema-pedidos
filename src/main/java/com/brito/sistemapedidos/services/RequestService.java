@@ -13,7 +13,6 @@ import com.brito.sistemapedidos.domain.OrderedItem;
 import com.brito.sistemapedidos.domain.PaymentWithBillet;
 import com.brito.sistemapedidos.domain.Request;
 import com.brito.sistemapedidos.domain.enums.StatePayment;
-import com.brito.sistemapedidos.repositories.ClientRepository;
 import com.brito.sistemapedidos.repositories.OrderedItemRepository;
 import com.brito.sistemapedidos.repositories.PaymentRepository;
 import com.brito.sistemapedidos.repositories.RequestRepository;
@@ -42,7 +41,7 @@ public class RequestService {
 	private EmailService emailService;
 	
 	@Autowired
-	private ClientRepository clientRepository;
+	private ClientService clientService;
 	
 	public List<Request> findAll(){
 		return requestRepository.findAll();
@@ -59,6 +58,7 @@ public class RequestService {
 		request.setId(null);
 		
 		request.setInstante(new Date());
+		request.setClient(clientService.findById(request.getClient().getId()));
 		request.getPayment().setState(StatePayment.PENDENTE);
 		request.getPayment().setRequest(request);
 		
