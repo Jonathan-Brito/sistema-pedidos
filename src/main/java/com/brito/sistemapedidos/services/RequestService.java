@@ -78,7 +78,7 @@ public class RequestService {
 		}
 		
 		orderedItemRepository.saveAll(request.getItens());
-		emailService.sendOrderConfirmationEmail(request);
+		emailService.sendOrderConfirmationHtmlEmail(request);
 		return request;
 	}
 	
