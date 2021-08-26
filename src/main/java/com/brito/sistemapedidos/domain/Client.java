@@ -29,13 +29,16 @@ public class Client implements Serializable {
 	private Integer id;
 
 	private String name;
-	
+
 	@Column(unique = true)
 	private String email;
 
 	private String cpfOrCnpj;
 
 	private Integer tipo;
+	
+	@JsonIgnore
+	private String senha;
 
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
 	private List<Address> addresses = new ArrayList<>();
@@ -52,13 +55,14 @@ public class Client implements Serializable {
 
 	}
 
-	public Client(Integer id, String name, String email, String cpfOrCnpj, TipoClient tipo) {
+	public Client(Integer id, String name, String email, String cpfOrCnpj, TipoClient tipo, String senha) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.cpfOrCnpj = cpfOrCnpj;
 		this.tipo = (tipo == null) ? null : tipo.getCode();
+		this.senha = senha;
 	}
 
 	public Integer getId() {
@@ -99,6 +103,14 @@ public class Client implements Serializable {
 
 	public void setTipo(TipoClient tipo) {
 		this.tipo = tipo.getCode();
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	public List<Address> getAddresses() {

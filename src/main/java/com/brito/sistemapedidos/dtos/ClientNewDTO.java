@@ -13,33 +13,36 @@ import com.brito.sistemapedidos.services.validation.ClientInsert;
 public class ClientNewDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@NotEmpty(message = "Campo é obrigatório")
 	@Length(min = 5, max = 100, message = "Campo name deve ter entre 5 e 100 caracteres")
 	private String name;
-	
+
 	@NotEmpty(message = "Campo é obrigatório")
 	@Email(message = "Email é inválido")
 	private String email;
-	
+
 	@NotEmpty(message = "Campo é obrigatório")
 	private String cpfOrCnpj;
 
 	private Integer tipo;
 	
 	@NotEmpty(message = "Campo é obrigatório")
+	private String senha;
+
+	@NotEmpty(message = "Campo é obrigatório")
 	private String logradouro;
-	
+
 	@NotEmpty(message = "Campo é obrigatório")
 	private String number;
 
 	private String complement;
 
 	private String district;
-	
+
 	@NotEmpty(message = "Campo é obrigatório")
 	private String cep;
-	
+
 	@NotEmpty(message = "Campo é obrigatório")
 	private String phone1;
 
@@ -83,6 +86,14 @@ public class ClientNewDTO implements Serializable {
 
 	public void setTipo(Integer tipo) {
 		this.tipo = tipo;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	public String getLogradouro() {
