@@ -19,6 +19,7 @@ import com.brito.sistemapedidos.domain.PaymentWithCard;
 import com.brito.sistemapedidos.domain.Product;
 import com.brito.sistemapedidos.domain.Request;
 import com.brito.sistemapedidos.domain.State;
+import com.brito.sistemapedidos.domain.enums.Profile;
 import com.brito.sistemapedidos.domain.enums.StatePayment;
 import com.brito.sistemapedidos.domain.enums.TipoClient;
 import com.brito.sistemapedidos.repositories.AddressRepository;
@@ -122,17 +123,22 @@ public class DBService {
 		stateRepository.saveAll(Arrays.asList(sta1, sta2));
 		cityRepository.saveAll(Arrays.asList(c1, c2, c3));
 
-		Client cli1 = new Client(null, "Jonathan Junior", "jbcostacontador@gmail.com", "11111111111", TipoClient.PESSOAFISICA, pe.encode("123"));
-
+		Client cli1 = new Client(null, "Jonathan Junior", "jbcostacontador@gmail.com", "321.682.560-47", TipoClient.PESSOAFISICA, pe.encode("123"));
 		cli1.getPhones().addAll(Arrays.asList("86 999999999", "86 9888888888"));
-
+		
+		Client cli2 = new Client(null, "Jonathan", "jonathanbritocontador@gmail.com", "152.450.830-60", TipoClient.PESSOAFISICA, pe.encode("123"));
+		cli2.getPhones().addAll(Arrays.asList("86 977777777", "86 966666666"));
+		cli2.addProfile(Profile.ADMIN);
+		
 		Address a1 = new Address(null, "Rua Flores", "300", "Apto 003", "Barra Grande", "7752", cli1, c1);
 		Address a2 = new Address(null, "Avenida Matos", "100", "Sala 800", "Parque Poty", "5984", cli1, c2);
+		Address a3 = new Address(null, "Avenida Micanor", "200", null, "Parque Mão Santa", "8478", cli2, c2);
 
 		cli1.getAddresses().addAll(Arrays.asList(a1, a2));
+		cli2.getAddresses().addAll(Arrays.asList(a3));
 
-		clientRepository.saveAll(Arrays.asList(cli1));
-		addressRepository.saveAll(Arrays.asList(a1, a2));
+		clientRepository.saveAll(Arrays.asList(cli1, cli2));
+		addressRepository.saveAll(Arrays.asList(a1, a2, a3));
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 

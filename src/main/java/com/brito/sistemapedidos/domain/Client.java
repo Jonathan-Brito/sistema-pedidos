@@ -5,17 +5,20 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.brito.sistemapedidos.domain.enums.Profile;
 import com.brito.sistemapedidos.domain.enums.TipoClient;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -46,12 +49,17 @@ public class Client implements Serializable {
 	@ElementCollection
 	@CollectionTable(name = "PHONE")
 	private Set<String> phones = new HashSet<>();
+	
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "PROFILES")
+	private Set<Integer> profiles = new HashSet<>();
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "client")
 	private List<Request> requests = new ArrayList<>();
 
 	public Client() {
+		addProfile(Profile.CLIENTE);
 
 	}
 
@@ -63,6 +71,7 @@ public class Client implements Serializable {
 		this.cpfOrCnpj = cpfOrCnpj;
 		this.tipo = (tipo == null) ? null : tipo.getCode();
 		this.senha = senha;
+		addProfile(Profile.CLIENTE);
 	}
 
 	public Integer getId() {
@@ -111,6 +120,14 @@ public class Client implements Serializable {
 
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+	
+	public Set<Profile> getProfiles(){
+		return profiles.stream().map(x -> Profile.toEnum(x)).collect(Collectors.toSet());
+	}
+	
+	public void addProfile(Profile profile) {
+		profiles.add(profile.getCode());
 	}
 
 	public List<Address> getAddresses() {
