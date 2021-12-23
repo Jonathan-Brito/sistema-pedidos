@@ -11,7 +11,7 @@ import com.brito.sistemapedidos.domain.Category;
 public class CategoryDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	// id de categira
 	private Integer id;
 
 	@NotEmpty(message = "Campo name é obrigatório")
