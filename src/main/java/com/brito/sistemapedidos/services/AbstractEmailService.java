@@ -2,17 +2,10 @@ package com.brito.sistemapedidos.services;
 
 import java.util.Date;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
+import com.brito.sistemapedidos.domain.Client;
 import com.brito.sistemapedidos.domain.Request;
 
 public abstract class AbstractEmailService implements EmailService {
@@ -20,7 +13,39 @@ public abstract class AbstractEmailService implements EmailService {
 	@Value("${default.sender}")
 	private String sender;
 	
-	@Autowired
+	@Override
+	public void sendOrderConfirmationEmail(Request obj) {
+		SimpleMailMessage sm = prepareSimpleMailMessageFromPedido(obj);
+		sendEmail(sm);
+	}
+
+	protected SimpleMailMessage prepareSimpleMailMessageFromPedido(Request obj) {
+		SimpleMailMessage sm = new SimpleMailMessage();
+		sm.setTo(obj.getClient().getEmail());
+		sm.setFrom(sender);
+		sm.setSubject("Pedido confirmado! Código: " + obj.getId());
+		sm.setSentDate(new Date(System.currentTimeMillis()));
+		sm.setText(obj.toString());
+		return sm;
+	}
+	
+	@Override
+	public void sendNewPasswordEmail(Client cliente, String newPass) {
+		SimpleMailMessage sm = prepareNewPasswordEmail(cliente, newPass);
+		sendEmail(sm);
+	}
+	
+	protected SimpleMailMessage prepareNewPasswordEmail(Client cliente, String newPass) {
+		SimpleMailMessage sm = new SimpleMailMessage();
+		sm.setTo(cliente.getEmail());
+		sm.setFrom(sender);
+		sm.setSubject("Solicitação de nova senha");
+		sm.setSentDate(new Date(System.currentTimeMillis()));
+		sm.setText("Nova senha: " + newPass);
+		return sm;
+	}
+	
+	/*@Autowired
 	private TemplateEngine templateEngine;
 	
 	@Autowired
@@ -73,5 +98,6 @@ public abstract class AbstractEmailService implements EmailService {
 		mmh.setText(obj.toString());
 		return mimeMessage;
 	}
+	*/
 
 }

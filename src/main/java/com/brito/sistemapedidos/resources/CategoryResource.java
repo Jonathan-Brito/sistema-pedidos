@@ -10,19 +10,18 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.brito.sistemapedidos.dtos.CategoryDTO;
 import com.brito.sistemapedidos.domain.Category;
+import com.brito.sistemapedidos.dtos.CategoryDTO;
 import com.brito.sistemapedidos.services.CategoryService;
 
 @RestController
@@ -49,7 +48,8 @@ public class CategoryResource {
 		return ResponseEntity.ok().body(optional);
 	}
 	
-	@PostMapping
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Category> create(@Valid @RequestBody CategoryDTO categoryDto){
 		
 		Category category = categoryService.fromDTO(categoryDto);
@@ -62,7 +62,8 @@ public class CategoryResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	@PutMapping(value = "/{id}")
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<CategoryDTO> update(@Valid @PathVariable Integer id, @RequestBody CategoryDTO categoryDTO){
 		
 		Category category = categoryService.update(id, categoryDTO);
@@ -70,7 +71,8 @@ public class CategoryResource {
 		return ResponseEntity.ok().body(new CategoryDTO(category));
 	}
 	
-	@DeleteMapping(value = "/{id}")
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id){
 		categoryService.delete(id);
 		
