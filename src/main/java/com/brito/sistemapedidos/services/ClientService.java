@@ -17,11 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.brito.sistemapedidos.domain.Address;
 import com.brito.sistemapedidos.domain.City;
 import com.brito.sistemapedidos.domain.Client;
+import com.brito.sistemapedidos.domain.enums.Profile;
 import com.brito.sistemapedidos.domain.enums.TipoClient;
 import com.brito.sistemapedidos.dtos.ClientDTO;
 import com.brito.sistemapedidos.dtos.ClientNewDTO;
 import com.brito.sistemapedidos.repositories.AddressRepository;
 import com.brito.sistemapedidos.repositories.ClientRepository;
+import com.brito.sistemapedidos.security.UserSS;
+import com.brito.sistemapedidos.services.exceptions.AuthorizationException;
 import com.brito.sistemapedidos.services.exceptions.DataIntegrityException;
 import com.brito.sistemapedidos.services.exceptions.ObjectNotFoundException;
 
@@ -37,6 +40,18 @@ public class ClientService {
 	
 	@Autowired
 	private AddressRepository addressRepository;
+	
+	public Client find(Integer id) {
+		
+		UserSS user = UserService.authenticated();
+		if (user==null || !user.hasRole(Profile.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
+		Optional<Client> obj = clientRepository.findById(id);
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Client.class.getName()));
+	}
 	
 	public List<Client> findAll(){
 		return clientRepository.findAll();
