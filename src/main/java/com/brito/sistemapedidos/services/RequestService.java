@@ -7,8 +7,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.brito.sistemapedidos.domain.Client;
 import com.brito.sistemapedidos.domain.OrderedItem;
 import com.brito.sistemapedidos.domain.PaymentWithBillet;
 import com.brito.sistemapedidos.domain.Request;
@@ -16,6 +20,8 @@ import com.brito.sistemapedidos.domain.enums.StatePayment;
 import com.brito.sistemapedidos.repositories.OrderedItemRepository;
 import com.brito.sistemapedidos.repositories.PaymentRepository;
 import com.brito.sistemapedidos.repositories.RequestRepository;
+import com.brito.sistemapedidos.security.UserSS;
+import com.brito.sistemapedidos.services.exceptions.AuthorizationException;
 import com.brito.sistemapedidos.services.exceptions.ObjectNotFoundException;
 
 
@@ -80,6 +86,19 @@ public class RequestService {
 		orderedItemRepository.saveAll(request.getItens());
 		emailService.sendOrderConfirmationHtmlEmail(request);
 		return request;
+	}
+	
+	public Page<Request> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
+		UserSS user = UserService.authenticated();
+		if(user == null) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		Client client = clientService.find(user.getId());
+		
+		return requestRepository.findByClient(client, pageRequest);
+		
 	}
 	
 
