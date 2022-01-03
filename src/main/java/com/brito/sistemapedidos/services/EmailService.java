@@ -18,6 +18,6 @@ public interface EmailService {
 	
 	void sendHtmlEmail(MimeMessage msg);
 	
-	void sendNewPasswordEmail(Client cliente, String newPass);
+	void sendNewPasswordEmail(Client client, String newPass);
 
 }

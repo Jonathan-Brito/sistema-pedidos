@@ -30,14 +30,14 @@ public abstract class AbstractEmailService implements EmailService {
 	}
 	
 	@Override
-	public void sendNewPasswordEmail(Client cliente, String newPass) {
-		SimpleMailMessage sm = prepareNewPasswordEmail(cliente, newPass);
+	public void sendNewPasswordEmail(Client client, String newPass) {
+		SimpleMailMessage sm = prepareNewPasswordEmail(client, newPass);
 		sendEmail(sm);
 	}
 	
-	protected SimpleMailMessage prepareNewPasswordEmail(Client cliente, String newPass) {
+	protected SimpleMailMessage prepareNewPasswordEmail(Client client, String newPass) {
 		SimpleMailMessage sm = new SimpleMailMessage();
-		sm.setTo(cliente.getEmail());
+		sm.setTo(client.getEmail());
 		sm.setFrom(sender);
 		sm.setSubject("Solicitação de nova senha");
 		sm.setSentDate(new Date(System.currentTimeMillis()));
